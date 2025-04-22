@@ -12,5 +12,11 @@
 /*****************************************************************************/
 
 #include "device/cgastr.h"
+#include "machine/cgascr.h"
 
-/* Add your code here */ 
+CGA_Stream::CGA_Stream() : O_Stream(), CGA_Screen() {}
+
+void CGA_Stream::flush() {
+    print(buffer, buffer_size, 0x07); // Output buffer to VGA
+    buffer_size = 0; // Reset buffer
+}

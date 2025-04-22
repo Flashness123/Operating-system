@@ -235,10 +235,27 @@ Key Keyboard_Controller::key_hit()
 {
 	Key invalid; // not explicitly initialized Key objects are invalid
 /* Add your code here */ 
-/* Add your code here */ 
- 
-/* Add your code here */ 
-	return invalid;
+    // Check if a byte is ready in the output buffer (outb bit)
+    unsigned char status = ctrl_port.inb();
+    if (!(status & outb)) {
+        return invalid; // No data available
+    }
+
+    // Check if the byte is from the keyboard (auxb bit: 0 = keyboard, 1 = mouse)
+    if (status & auxb) {
+        data_port.inb(); // Discard mouse data
+        return invalid;
+    }
+
+    // Read the byte from the output buffer
+    code = data_port.inb();
+
+    // Decode the key
+    if (key_decoded()) {
+        return gather; // Return the decoded key if complete
+    }
+
+    return invalid; // Key not complete yet
 }
 
 // REBOOT: Reboots the PC. Yes, in a PC the keyboard controller is
@@ -255,8 +272,7 @@ void Keyboard_Controller::reboot()
 
 	// keyboard controller triggers the reset
 	do {
-		status =
-		    ctrl_port.inb(); // wait until last command is processed
+		status = ctrl_port.inb(); // wait until last command is processed
 	} while ((status & inpb) != 0);
 	ctrl_port.outb(cpu_reset); // reset
 }
@@ -271,19 +287,59 @@ void Keyboard_Controller::reboot()
 //                  slow).
 
 void Keyboard_Controller::set_repeat_rate(int speed, int delay)
+/* Add your code here */ 
 {
-/* Add your code here */ 
- 
-/* Add your code here */ 
- 
+    // Validate parameters
+    if (speed < 0 || speed > 31 || delay < 0 || delay > 3) {
+        return;
+    }
+
+    // Wait for input buffer to be empty (inpb bit)
+    unsigned char status;
+    do {
+        status = ctrl_port.inb();
+    } while (status & inpb);
+
+    // Send the set_speed command (0xf3)
+    data_port.outb(kbd_cmd::set_speed);
+
+    // Wait for input buffer to be empty again
+    do {
+        status = ctrl_port.inb();
+    } while (status & inpb);
+
+    // Construct the data byte: delay (bits 5-6), speed (bits 0-4)
+    unsigned char data = (delay << 5) | (speed & 0x1F);
+    data_port.outb(data);
 }
+
 
 // SET_LED: sets or clears the specified LED
 
 void Keyboard_Controller::set_led(char led, bool on)
+/* Add your code here */ 
 {
-/* Add your code here */ 
- 
-/* Add your code here */ 
- 
+    // Update the internal leds state
+    if (on) {
+        leds |= led;
+    } else {
+        leds &= ~led;
+    }
+
+    // Wait for input buffer to be empty (inpb bit)
+    unsigned char status;
+    do {
+        status = ctrl_port.inb();
+    } while (status & inpb);
+
+    // Send the set_led command (0xed)
+    data_port.outb(kbd_cmd::set_led);
+
+    // Wait for input buffer to be empty again
+    do {
+        status = ctrl_port.inb();
+    } while (status & inpb);
+
+    // Send the LED state data byte
+    data_port.outb(leds);
 }

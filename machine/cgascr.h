@@ -22,11 +22,11 @@ private:
 public:
 	CGA_Screen(const CGA_Screen &copy) = delete; // prevent copying
 	CGA_Screen& operator=(const CGA_Screen&) = delete; // prevent assignment
-	CGA_Screen()
-/* Add your code here */ 
-{}
-
-/* Add your code here */ 
+	CGA_Screen();
+	void show(int x, int y, char c, unsigned char attrib);
+    void setpos(int x, int y);
+    void getpos(int &x, int &y);
+    void print(char* text, int length, unsigned char attrib);
 };
 
 /* Add your code here */ 

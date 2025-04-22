@@ -15,4 +15,16 @@
 
 #include "object/strbuf.h"
 
-/* Add your code here */ 
+Stringbuffer::Stringbuffer(){
+    buffer_size = 0;
+} 
+
+void Stringbuffer::put (char c){
+    /*For this to work, note:   flush() only reads up to buffer_size*/
+    if (buffer_size >= BUFFER_SIZE) {
+        flush();
+        buffer_size = 0;  //could be called pos
+    }
+    buffer[buffer_size] = c;
+    buffer_size++; //point to a free position
+}

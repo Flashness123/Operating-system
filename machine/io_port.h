@@ -14,6 +14,9 @@
 /* "port") at instantiation time and can then be used for byte- or word-wise */
 /* input or output operations.                                               */
 /*****************************************************************************/
+// byte-wise (8-bit) and word-wise (16-bit)
+
+
 
 /* USED FUNCTIONS */
 
