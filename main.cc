@@ -1,45 +1,38 @@
-#include "machine/cgascr.h"
+#include "machine/cpu.h"
+#include "machine/pic.h"
+#include "device/keyboard.h"
 #include "device/cgastr.h"
-#include "device/cgastr.h"
-#include "machine/keyctrl.h"
-#include "machine/cgascr.h"
-#include "user/appl.h"
-#include "object/o_stream.h"
 
-// int main() {
-//     CGA_Stream kout;
-//     Keyboard_Controller keyboard;
-//     kout << "Press a key (or Esc to exit):" << endl;
-//     while (true) {
-//         Key key = keyboard.key_hit();
-//         if (key.valid()) {
-//             kout << "ASCII: " << (int)key.ascii() << ", Scancode: " << (int)key.scancode() << endl;
-//             if (key.scancode() == 1) { // Esc key
-//                 kout << "Esc pressed, exiting..." << endl;
-//                 break;
-//             }
-//         }
-//     }
-//     return 0;
-// }
+CPU cpu;
+PIC pic;
+Keyboard_Controller keyboard;
+CGA_Stream kout;
 
-int main(){
-    CGA_Stream kout;
-    kout << "Test          <stream result> -> <expected>" << endl;
-    kout << "zero:         " << 0 << " -> 0" << endl;
-    kout << "decimal:      " << dec << 42 << " -> 42" << endl;
-    kout << "binary:       " << bin << 42 << dec << " -> 0b101010" << endl;
-    kout << "octal:        " << oct << 42 << dec << " -> 052" << endl;
-    kout << "hex:          " << hex << 42 << dec << " -> 0x2a" << endl;
-    kout << "uint64_t max: " << ~((unsigned long)0) << " -> 18446744073709551615" << endl;
-    kout << "int64_t max:  " << ~(1l<<63) << " -> 9223372036854775807" << endl;
-    kout << "int64_t min:  " << (1l<<63) << " -> -9223372036854775808" << endl;
-    kout << "some int64_t: " << (-1234567890123456789) << " -> -1234567890123456789" << endl;
-    kout << "some int64_t: " << (1234567890123456789) << " -> 1234567890123456789" << endl;
-    kout << "pointer:      " << reinterpret_cast<void*>(1994473406541717165ul) << " -> 0x1badcafefee1dead" << endl;
-    kout << "smiley:       " << static_cast<char>(1) << endl;
+int main() {
+    // Clear keyboard buffer to prevent residual interrupts
+    while (keyboard.key_hit().valid()) {
+        // Discard pending scan codes
+    }
 
-    kout << "binary long   " << bin << ~((unsigned long)0) << endl; 
-    kout << "binary long   " << bin << -42 << endl; 
+    // Enable interrupts
+    cpu.enable_int();
+    pic.allow(PIC::keyboard);
+
+    // Test loop to read scan codes and print on new lines
+    int key_row = 10; // Start key messages at row 10
+    while (true) {
+        Key key = keyboard.key_hit();
+        if (key.valid()) {
+            kout.setpos(0, key_row);
+            kout << "Key pressed: " << key.ascii() << endl;
+            kout.flush();
+
+            // Move to the next line for the next key press
+            key_row++;
+            if (key_row >= 25) { // Wrap around if needed
+                key_row = 10;
+            }
+        }
+    }
     return 0;
 }
