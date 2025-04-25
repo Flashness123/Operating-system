@@ -16,9 +16,6 @@
 #include "machine/io_port.h"
 
 class CGA_Screen {
-private:
-/* Add your code here */ 
-
 public:
 	CGA_Screen(const CGA_Screen &copy) = delete; // prevent copying
 	CGA_Screen& operator=(const CGA_Screen&) = delete; // prevent assignment
@@ -28,7 +25,4 @@ public:
     void getpos(int &x, int &y);
     void print(char* text, int length, unsigned char attrib);
 };
-
-/* Add your code here */ 
-
 #endif

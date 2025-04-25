@@ -9,4 +9,11 @@
 /* for every hardware and software interrupt and every CPU exception.        */
 /*****************************************************************************/
 
-/* Add your code here */ 
+#import "guard/gate.h"
+#import "machine/plugbox.h"
+
+Plugbox::Plugbox(){
+
+}
+void Plugbox::assign(unsigned int slot, Gate& gate){}
+Gate& Plugbox::report(unsigned int slot){}

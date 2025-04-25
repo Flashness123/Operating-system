@@ -16,10 +16,15 @@
 
 class Plugbox {
 public:
+	unsigned int timer = 32;
+	unsigned int keyboard = 33;
+
 	Plugbox(const Plugbox &copy) = delete; // prevent copying
 	Plugbox& operator=(const Plugbox&) = delete; // prevent assignment
-private:
-/* Add your code here */ 
+
+	Plugbox();
+	void assign(unsigned int slot, Gate& gate);
+	Gate& report(unsigned int slot);
 };
 
 #endif
