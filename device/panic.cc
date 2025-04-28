@@ -7,6 +7,18 @@
 /*---------------------------------------------------------------------------*/
 /* Default interrupt handler.                                                */
 /*****************************************************************************/
-/* Add your code here */ 
-/* Add your code here */ 
- 
+
+#include "device/panic.h"
+#include "device/cgastr.h"
+#include "machine/cpu.h"
+
+extern CGA_Stream kout;
+extern CPU cpu;
+
+Panic::Panic(){}
+
+void Panic::trigger() {
+    kout << "Panic: Unhandled interrupt!" << endl;
+    kout.flush();
+    cpu.halt();
+}
