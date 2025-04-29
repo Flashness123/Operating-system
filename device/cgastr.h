@@ -26,4 +26,6 @@ public:
 	void flush() override;
 };
 
+extern CGA_Stream kout; // global instance of CGA_Stream
+
 #endif

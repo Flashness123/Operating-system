@@ -32,4 +32,7 @@ private:
 	Panic panic;
 };
 
+// Example
+extern Plugbox plugbox;
+
 #endif

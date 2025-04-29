@@ -1,3 +1,5 @@
+//TODO: Acknoledgement byte abholen bei set_led
+
 /*****************************************************************************/
 /* Operating-System Construction                                             */
 /*---------------------------------------------------------------------------*/
@@ -231,7 +233,7 @@ Keyboard_Controller::Keyboard_Controller() : ctrl_port(0x64), data_port(0x60)
 //          Otherwise, key_hit () returns an invalid value, which can be
 //          checked by calling Key::valid ().
 
-Key Keyboard_Controller::key_hit()
+Key Keyboard_Controller::key_hit() 
 {
 	Key invalid; // not explicitly initialized Key objects are invalid
 /* Add your code here */ 
@@ -251,7 +253,7 @@ Key Keyboard_Controller::key_hit()
     code = data_port.inb();
 
     // Decode the key
-    if (key_decoded()) {
+    if (key_decoded()) { //Sums all the key codes pressed at the same points ctrl+d
         return gather; // Return the decoded key if complete
     }
 

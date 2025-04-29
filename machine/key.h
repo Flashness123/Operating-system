@@ -99,7 +99,7 @@ public:
 	bool scroll_lock() { return modi & mbit::scroll_lock; }
 	bool alt() { return alt_left() | alt_right(); }
 	bool ctrl() { return ctrl_left() | ctrl_right(); }
-
+	
 	operator char() { return (char)asc; }
 
 	// scan codes of a few specific keys

@@ -42,6 +42,13 @@ A reference is bound to an existing object and acts like that object, modifiing 
 private - not accessible to derived classes and external code
 protected - accessible from derived classes but not external code
 
+SETUP Task 2:
+Keyboard controller on motherboard has buffer (in the Class is just teh driver), it activates a cabel if output buffer nonempty (key pressed) -> this is called interrupt signal, 
+Programmable Interrupt controller is hardware (in PIC we just configuter it, like priority or enable/disable interrupts), cable from keyboard controller is attached to PIC, PIC has one single output cable which connects to CPU, so PIC only sends one at a time, unknown which, CPU asks which, PIC answers
+CPU calls guardian and tells it the number which corresponds to the type of interrupt.
+Guradian has in our case 64 different initerrupts and looks up what happens on which. 
+Gate is base class for every interrupt handler (Panic -default=all dead, Keyboard=33), Derived class from gate executes trigger
+
 QUESTIONS:
 Functions vs Methods?
 private vs protected?

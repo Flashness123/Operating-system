@@ -48,7 +48,8 @@ OBJDIR = ./build
 DEPDIR = ./dep
 # ATTENTION: using the wrong device name here will destroy data on the specified
 # device! Do not run with root privileges!
-DRIVE_HD = /dev/sdz
+DRIVE_HD = /dev/sdc
+#DRIVE_HD = /dev/sdz
 DELETE = rm
 ASM = nasm
 QEMU ?= qemu-system-x86_64

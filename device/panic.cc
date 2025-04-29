@@ -12,7 +12,7 @@
 #include "device/cgastr.h"
 #include "machine/cpu.h"
 
-extern CGA_Stream kout;
+//extern CGA_Stream kout;
 extern CPU cpu;
 
 Panic::Panic(){}
